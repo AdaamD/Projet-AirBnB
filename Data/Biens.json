@@ -11,6 +11,18 @@
       "prixNuit": 120
     },
     {
+      "idBien": 11,
+      "mailProprio": "pierre.dubois@example.com",
+      "commune": "Paris",
+      "rue": "Place de l'Europe",
+      "cp": "75002",
+      "nbChambres": 2,
+      "nbCouchages": 2,
+      "distance": 10,
+      "prixNuit": 95
+    },
+    
+    {
       "idBien": 2,
       "mailProprio": "marie.martin@example.com",
       "commune": "Lyon",
@@ -20,6 +32,17 @@
       "nbCouchages": 4,
       "distance": 3.0,
       "prixNuit": 80
+    },
+    {
+      "idBien": 2,
+      "mailProprio": "marie.martin@example.com",
+      "commune": "Lyon",
+      "rue": "Route des Peupliers",
+      "cp": "69003",
+      "nbChambres": 2,
+      "nbCouchages": 2,
+      "distance": 7.0,
+      "prixNuit": 40
     },
     {
       "idBien": 3,

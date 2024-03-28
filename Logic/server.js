@@ -8,7 +8,7 @@ const port = 8888;
 async function connectToDatabase() {
     try {
         const client = new MongoClient("mongodb://localhost:27017", { useNewUrlParser: true, useUnifiedTopology: true });
-        await client.connect();
+        await client.connect();     //away bloque le code en attendant de recevoir le code 
         console.log("Connexion à la base de données réussie");
         return client.db("MEAN"); // Remplacez 'MEAN' par le nom de votre base de données
     } catch (error) {
@@ -73,6 +73,55 @@ app.get("/biens/:commune", async (req, res) => {
         res.status(500).json({ message: "Une erreur est survenue lors de la récupération des biens." });
     }
 });
+
+// Route pour rechercher des biens par commune et nombre de couchages minimum
+app.get("/biens/:commune/:nbCouchagesMin", async (req, res) => {
+    const { commune, nbCouchagesMin } = req.params;
+    try {
+        const db = await connectToDatabase();
+        const documents = await db.collection("Biens").find({ commune: commune, nbCouchages: { $gte: parseInt(nbCouchagesMin) } }).toArray();
+        res.json(documents);
+    } catch (error) {
+        console.error("Erreur lors de la recherche des biens par commune et nombre de couchages minimum :", error);
+        res.status(500).json({ message: "Une erreur est survenue lors de la recherche des biens." });
+    }
+});
+
+// Route pour effectuer des recherches de biens selon plusieurs critères
+app.get("/biens/:commune/:nbCouchagesMin/:prixMax/:nbChambresMin/:distanceMax", async (req, res) => {
+    const { commune, nbCouchagesMin, prixMax, nbChambresMin, distanceMax } = req.params;
+    try {
+        const db = await connectToDatabase();
+        const query = { commune: commune };
+        
+        if (nbCouchagesMin !== 'null') {
+            query.nbCouchages = { $gte: parseInt(nbCouchagesMin) };
+        }
+        if (prixMax !== 'null') {
+            query.prixNuit = { $lte: parseInt(prixMax) };
+        }
+        if (nbChambresMin !== 'null') {
+            query.nbChambres = { $gte: parseInt(nbChambresMin) };
+        }
+        if (distanceMax !== 'null') {
+            query.distance = { $lte: parseFloat(distanceMax) };
+        }
+
+        const documents = await db.collection("Biens").find(query).toArray();
+        res.json(documents);
+    } catch (error) {
+        console.error("Erreur lors de la recherche des biens :", error);
+        res.status(500).json({ message: "Une erreur est survenue lors de la recherche des biens." });
+    }
+});
+
+
+
+
+
+
+
+
 
 
 
