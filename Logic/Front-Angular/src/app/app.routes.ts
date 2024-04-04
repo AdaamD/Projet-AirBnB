@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
-import { NavBar2Component } from './nav-bar2/nav-bar2.component';
+import { AffichageBienComponent } from './affichage-bien/affichage-bien.component';
 
 export const routes: Routes = [
 
     {
     path: '',
-    component:  NavBar2Component
+    component:  AffichageBienComponent
     }
         
 ];
