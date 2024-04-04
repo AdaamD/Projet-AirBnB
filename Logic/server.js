@@ -134,30 +134,39 @@ app.get("/locations", async (req, res) => {
     }
 });
 
-// Route pour enregistrer une réservation d'un bien
-app.post("/reservations", async (req, res) => {
-    const { idBien, dateDebut, dateFin, mailLoueur } = req.body; 
 
+// Route pour récupérer les biens d'une commune qui ne sont pas déjà loués
+app.get("/bienslouer/:commune", async (req, res) => {
+    const commune = req.params.commune;
     try {
-        const db = await connectToDatabase();
-
-        // Créer un nouveau document pour la réservation
-        const newReservation = {
-            idBien: ObjectId(idBien), // Supposons que idBien est l'ID de l'objet bien dans la collection Biens
-            dateDebut: dateDebut,
-            dateFin: dateFin,
-            mailLoueur: mailLoueur
-        };
-
-        // Insérer la nouvelle réservation dans la collection Locations
-        const result = await db.collection("Locations").insertOne(newReservation);
-        
-        res.status(201).json({ message: "Réservation enregistrée avec succès", reservation: result.ops[0] });
-    } catch (error) {
-        console.error("Erreur lors de l'enregistrement de la réservation :", error);
-        res.status(500).json({ message: "Une erreur est survenue lors de l'enregistrement de la réservation." });
+    const db = await connectToDatabase();
+   
+    // Requête pour récupérer les biens de la commune qui ne sont pas déjà loués
+    const biensNonLoues = await db.collection("Biens").aggregate([
+    {
+    $match: { commune: commune }
+    },
+    {
+    $lookup: {
+    from: "Locations",
+    localField: "idBien",
+    foreignField: "idBien",
+    as: "locations"
     }
-});
+    },
+    {
+    $match: { "locations": { $eq: [] } } // Exclure les biens déjà loués
+    }
+    ]).toArray();
+   
+    res.json(biensNonLoues);
+    } catch (error) {
+    console.error("Erreur lors de la récupération des biens de la commune :", error);
+    res.status(500).json({ message: "Une erreur est survenue lors de la récupération des biens." });
+    }
+   });
+   
+   
 
 
 
