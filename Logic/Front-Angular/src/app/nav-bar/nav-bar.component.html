@@ -1,1 +1,66 @@
-<p>nav-bar works!</p>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recherche de biens</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Recherche de biens</h1>
+    <form>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="startDate">Date de début de location</label>
+            <input type="date" class="form-control" id="startDate" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="endDate">Date de fin de location</label>
+            <input type="date" class="form-control" id="endDate" required>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="city">Commune</label>
+        <input type="text" class="form-control" id="city" required>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="maxPrice">Prix max</label>
+            <input type="number" class="form-control" id="maxPrice" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="minRooms">Nombre de chambres min</label>
+            <input type="number" class="form-control" id="minRooms" required>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="minBeds">Nombre de couchages min</label>
+            <input type="number" class="form-control" id="minBeds" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="maxDistance">Distance max au centre-ville (en mètres)</label>
+            <input type="number" class="form-control" id="maxDistance" required>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Rechercher</button>
+    </form>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
