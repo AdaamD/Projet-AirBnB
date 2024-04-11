@@ -3,6 +3,8 @@ const { MongoClient } = require("mongodb");
 
 const app = express();
 const port = 8888;
+const cors = require('cors');
+
 
 // Connexion à la base de données MongoDB
 async function connectToDatabase() {
@@ -16,6 +18,11 @@ async function connectToDatabase() {
         throw error;
     }
 }
+
+app.use(cors({
+    origin: 'http://localhost:4200'
+  }));
+  
 
 // Route pour récupérer les utilisateurs
 app.get("/users", async (req, res) => {

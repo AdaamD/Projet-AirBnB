@@ -1,0 +1,56 @@
+/* Ajoutez vos styles CSS ici selon vos préférences */
+body {
+  font-family: 'Poppins', Arial, sans-serif; /* Utilisation de la police Poppins en premier choix */
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
+
+.bien-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.bien-item {
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1rem;
+  width: calc(33% - 2rem);
+  max-width: 300px;
+}
+
+.bien-header {
+  background-color: #333;
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
+}
+
+.bien-header h3 {
+  margin: 0;
+}
+
+.bien-details {
+  padding: 1rem;
+}
+
+.bien-details p {
+  margin-bottom: 0.5rem;
+  font-family: 'Poppins', Arial, sans-serif; /* Utilisation de la police Poppins pour les paragraphes */
+}
+
+.bien-details ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.bien-details ul li {
+  margin-bottom: 0.5rem;
+}
+
+.bien-details ul li strong {
+  color: #3498db; /* Remplacez la couleur verte par une couleur bleue foncée */
+}
