@@ -95,7 +95,7 @@ app.get("/biens/:commune/:nbCouchagesMin", async (req, res) => {
 });
 
 // Route pour effectuer des recherches de biens selon plusieurs critères
-app.get("/biens/:commune/:nbCouchagesMin/:prixMax/:nbChambresMin/:distanceMax", async (req, res) => {
+app.get("/biens/recherche/:commune/:nbCouchagesMin/:prixMax/:nbChambresMin/:distanceMax", async (req, res) => {
     const { commune, nbCouchagesMin, prixMax, nbChambresMin, distanceMax } = req.params;
     try {
         const db = await connectToDatabase();
@@ -121,6 +121,36 @@ app.get("/biens/:commune/:nbCouchagesMin/:prixMax/:nbChambresMin/:distanceMax", 
         res.status(500).json({ message: "Une erreur est survenue lors de la recherche des biens." });
     }
 });
+
+
+// Route pour effectuer des recherches de biens selon plusieurs critères SANS COMMUNE
+app.get("/biens/recherche/:nbCouchagesMin/:prixMax/:nbChambresMin/:distanceMax", async (req, res) => {
+    const { commune, nbCouchagesMin, prixMax, nbChambresMin, distanceMax } = req.params;
+    try {
+        const db = await connectToDatabase();
+        const query = { };
+        
+        if (nbCouchagesMin !== 'null') {
+            query.nbCouchages = { $gte: parseInt(nbCouchagesMin) };
+        }
+        if (prixMax !== 'null') {
+            query.prixNuit = { $lte: parseInt(prixMax) };
+        }
+        if (nbChambresMin !== 'null') {
+            query.nbChambres = { $gte: parseInt(nbChambresMin) };
+        }
+        if (distanceMax !== 'null') {
+            query.distance = { $lte: parseFloat(distanceMax) };
+        }
+
+        const documents = await db.collection("Biens").find(query).toArray();
+        res.json(documents);
+    } catch (error) {
+        console.error("Erreur lors de la recherche des biens :", error);
+        res.status(500).json({ message: "Une erreur est survenue lors de la recherche des biens." });
+    }
+});
+
 
 app.get("/locations", async (req, res) => {
     try {

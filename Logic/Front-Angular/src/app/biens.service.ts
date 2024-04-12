@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subscriber } from 'rxjs';
+import { Observable, Subscriber, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,10 +17,24 @@ export class BiensService {
       console.log(data);
     });
 
-    return biens
-
-  
-    
-
+    return biens 
   }
+
+  searchBiens(startDate: string, endDate: string, commune: string, maxPrice: number, minRooms: number, minBeds: number, maxDistance: number): Observable<any> {
+    let searchUrl: string;
+    
+    if (commune) {
+      // Recherche avec une commune spécifique
+      searchUrl = `${this.apiUrl}/recherche/${commune}/${minBeds}/${maxPrice}/${minRooms}/${maxDistance}`;
+    } else {
+      // Recherche sans commune spécifiée (toutes les communes)
+      searchUrl = `${this.apiUrl}/recherche/${minBeds}/${maxPrice}/${minRooms}/${maxDistance}`;
+    }
+    
+    console.log("Search URL:", searchUrl);
+     return this.http.get<any[]>(searchUrl);
+  }
+  
+  
+  
 }
