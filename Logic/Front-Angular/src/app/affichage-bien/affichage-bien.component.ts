@@ -13,7 +13,7 @@ import { BiensDataService } from '../biens-data-service.service';
 
 export class AffichageBienComponent implements OnInit {
   biens: any[] = [];
-
+  afficherDetailsSupplementaires: boolean = false;
   constructor(private biensDataService: BiensDataService) { }
   
   ngOnInit(): void {
@@ -25,6 +25,7 @@ export class AffichageBienComponent implements OnInit {
     const minRooms = 1; // Vous pouvez remplacer par un nombre de chambres minimum
     const minBeds = 1; // Vous pouvez remplacer par un nombre de couchages minimum
     const maxDistance = 1000; // Vous pouvez remplacer par une distance maximum
+
 
     this.biensDataService.biens$.subscribe(
       (biens) => {

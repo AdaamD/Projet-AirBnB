@@ -1,23 +1,22 @@
 /* Styles de base */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Style du header */
-  header {
-    background-color: #333;
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-  }
-  
- 
-  
-  /* Style du contenu principal */
-  main {
-    padding: 20px;
-    min-height: calc(100vh - 140px); /* Ajuste la hauteur minimale en fonction de la hauteur du header et du footer */
-  }
-  
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #cdcdce; /* Couleur de fond modifiée */
+}
+
+/* Style du header */
+header {
+  background-color: #004D74; /* Couleur de fond du header modifiée */
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Style du contenu principal */
+main {
+  padding: 20px;
+  min-height: calc(100vh - 140px); /* Ajuste la hauteur minimale en fonction de la hauteur du header et du footer */
+  color: #fff; /* Couleur du texte modifiée */
+}

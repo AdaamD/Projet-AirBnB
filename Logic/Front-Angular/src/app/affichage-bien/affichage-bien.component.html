@@ -1,22 +1,31 @@
-
-<body>
-    <div class="bien-list">
-        <div *ngFor="let bien of biens" class="bien-item">
-            <div class="bien-header">
-                <h3>{{ bien.commune }} - {{ bien.rue }}</h3>
-            </div>
-            <div class="bien-details">
-                <ul>
-                   <!-- <li><strong>ID du bien :</strong> {{ bien.idBien }}</li>  -->
-                    <li><strong>Adresse e-mail du propriétaire :</strong> {{ bien.mailProprio }}</li>
-                    <li><strong>Code postal :</strong> {{ bien.cp }}</li>
-                    <li><strong>Nombre de chambres :</strong> {{ bien.nbChambres }}</li>
-                   <!-- <li><strong>Nombre de couchages :</strong> {{ bien.nbCouchages }}</li> -->
-                    <li><strong>Distance :</strong> {{ bien.distance }} km</li>
-                    <li><strong>Prix par nuit :</strong> {{ bien.prixNuit }} €</li>
-                </ul>
-            </div>
-        </div>
+<div class="bien-list">
+    <div *ngFor="let bien of biens" class="bien-item">
+      <div class="bien-header">
+        <h3>{{ bien.commune }} - {{ bien.rue }}</h3>
+      </div>
+      <div class="bien-details">
+        <ul>
+          <!-- Informations principales -->
+          <li><strong>Commune :</strong> {{ bien.commune }}</li>
+          <li><strong>Rue :</strong> {{ bien.rue }}</li>
+          <li><strong>Nombre de chambres :</strong> {{ bien.nbChambres }}</li>
+          <li><strong>Prix par nuit :</strong> {{ bien.prixNuit }} €</li>
+        </ul>
+        <button class="btn-details" (click)="afficherDetailsSupplementaires = !afficherDetailsSupplementaires">
+          {{ afficherDetailsSupplementaires ? '-' : '+' }}
+        </button>
+        <ng-container *ngIf="afficherDetailsSupplementaires">
+          <ul>
+            <!-- Informations supplémentaires -->
+            <li><strong>Adresse e-mail du propriétaire :</strong> {{ bien.mailProprio }}</li>
+            <li><strong>Code postal :</strong> {{ bien.cp }}</li>
+            <li><strong>Distance :</strong> {{ bien.distance }} km</li>
+            <!-- <li><strong>ID du bien :</strong> {{ bien.idBien }}</li> -->
+            <li><strong>Nombre de couchages :</strong> {{ bien.nbCouchages }}</li>
+            <!-- Ajoutez d'autres informations supplémentaires ici -->
+          </ul>
+        </ng-container>
+      </div>
     </div>
-</body>
-
+  </div>
+  
