@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { BiensService } from '../biens.service';
 import { FormsModule, NgForm } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { BiensDataService } from '../biens-data-service.service';
 
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule,CommonModule],
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css']
 })
@@ -21,8 +23,8 @@ export class NavBarComponent {
   form: NgForm;
   biens: any[]= [] ;
 
-  constructor(private biensService: BiensService) {
-    this.form = new NgForm([], []); // Initialisez form avec une nouvelle instance de NgForm
+  constructor(private biensService: BiensService, private biensDataService: BiensDataService) {
+    this.form = new NgForm([], []);
   }
 
   onSearch(form: NgForm) {
@@ -30,7 +32,7 @@ export class NavBarComponent {
     this.biensService.searchBiens(startDate, endDate, commune, maxPrice, minRooms, minBeds, maxDistance).subscribe(
       (data) => {
         console.log('Search Results:', data);
-        this.biens = data;
+        this.biensDataService.setBiens(data); // Mettre à jour les données dans le service
       },
       (error) => {
         console.error('Error:', error);

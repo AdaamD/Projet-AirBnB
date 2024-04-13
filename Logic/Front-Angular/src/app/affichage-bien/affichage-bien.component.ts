@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BiensService } from '../biens.service';
+import { BiensDataService } from '../biens-data-service.service';
 
 @Component({
   selector: 'app-affichage-bien',
@@ -13,8 +14,8 @@ import { BiensService } from '../biens.service';
 export class AffichageBienComponent implements OnInit {
   biens: any[] = [];
 
-  constructor(private biensService: BiensService) { }
-
+  constructor(private biensDataService: BiensDataService) { }
+  
   ngOnInit(): void {
     // Utilisez des valeurs par défaut pour les critères de recherche
     const startDate = ''; 
@@ -25,14 +26,9 @@ export class AffichageBienComponent implements OnInit {
     const minBeds = 1; // Vous pouvez remplacer par un nombre de couchages minimum
     const maxDistance = 1000; // Vous pouvez remplacer par une distance maximum
 
-    this.biensService.searchBiens(startDate, endDate, commune, maxPrice, minRooms, minBeds, maxDistance).subscribe(
-      (data) => {
-        console.log("AAAAAA");
-        console.log(data);
-        this.biens = data;
-      },
-      (error) => {
-        console.error('Error:', error);
+    this.biensDataService.biens$.subscribe(
+      (biens) => {
+        this.biens = biens;
       }
     );
   }
