@@ -82,3 +82,15 @@ body {
   cursor: pointer;
   font-weight: 700; /* Graisse de police plus élevée pour le bouton */
 }
+
+/* Styles pour le bouton de réservation */
+.btn-reservation {
+  background-color: #006DA4;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+

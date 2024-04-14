@@ -36,17 +36,6 @@ app.get("/users", async (req, res) => {
     }
 });
 
-// Route pour récupérer les utilisateurs dont le nom commence par D
-app.get("/users/D", async (req, res) => {
-    try {
-        const db = await connectToDatabase();
-        const documents = await db.collection("Users").find({ nom: { $regex: '^D', $options: 'i' } }).toArray();
-        res.json(documents);
-    } catch (error) {
-        console.error("Erreur lors de la récupération des utilisateurs dont le nom commence par D :", error);
-        res.status(500).json({ message: "Une erreur est survenue lors de la récupération des utilisateurs." });
-    }
-});
 
 // Route pour récupérer les biens et compter leurs nombre
 app.get("/biens", async (req, res) => {
@@ -152,25 +141,44 @@ app.get("/biens/recherche/:nbCouchagesMin/:prixMax/:nbChambresMin/:distanceMax",
 });
 
 
-app.get("/locations", async (req, res) => {
+// Route pour enregistrer une réservation
+app.post("/reservations", async (req, res) => {
     try {
-        const db = await connectToDatabase();
-        const documents = await db.collection("Locations").find().toArray();
-        const nbDocuments = await db.collection("Locations").countDocuments();
-
-        // Créer un objet JSON contenant à la fois les documents et le nombre de documents
-        const response = {
-            documents: documents,
-            count: nbDocuments
-        };
-        res.json(response);
-
-    } catch (error) {
-        console.error("Erreur lors de la récupération des biens :", error);
-        res.status(500).json({ message: "Une erreur est survenue lors de la récupération des biens." });
+    const { idBien, dateDebut, dateFin, mailLoueur, prixNuit } = req.body;
+   
+    // Vérifier si toutes les données requises sont présentes
+    if (!idBien || !dateDebut || !dateFin || !mailLoueur || !prixNuit) {
+    throw new Error("Les données de la requête sont incorrectes.");
     }
-});
-
+   
+    const db = await connectToDatabase();
+   
+    // Vérifier si idBien est une chaîne hexadécimale valide de 24 caractères
+    if (!ObjectId.isValid(idBien)) {
+    throw new Error("idBien n'est pas valide.");
+    }
+   
+    // Créer un nouvel ObjectId à partir de la chaîne idBien
+    const objectIdBien = new ObjectId(idBien);
+   
+    // Créer un nouveau document pour la réservation
+    const newReservation = {
+    idBien: objectIdBien,
+    dateDebut,
+    dateFin,
+    mailLoueur,
+    prixNuit: parseFloat(prixNuit) // Convertir le prix en nombre à virgule flottante
+    };
+   
+    // Insérer la nouvelle réservation dans la collection Locations de la base de données
+    const result = await db.collection("Locations").insertOne(newReservation);
+   
+    res.status(201).json({ message: "Réservation enregistrée avec succès", reservation: newReservation });
+    } catch (error) {
+    console.error("Erreur lors de l'enregistrement de la réservation :", error);
+    res.status(500).json({ message: "Une erreur est survenue lors de l'enregistrement de la réservation." });
+    }
+   });
 
 // Route pour récupérer les biens d'une commune qui ne sont pas déjà loués
 app.get("/bienslouer/:commune", async (req, res) => {
