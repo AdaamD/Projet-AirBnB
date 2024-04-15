@@ -1,0 +1,18 @@
+[
+  {
+    "idBien": 2,
+    "dateDebut": "2024-04-15",
+    "dateFin": "2024-04-20",
+    "mailLoueur": "pierre.dubois@example.com",
+    "prixNuit": 120,
+    "_id": "661d38d6385117ea7df89631"
+  },
+  {
+    "idBien": 2,
+    "dateDebut": "2024-04-16",
+    "dateFin": "2024-04-20",
+    "mailLoueur": "pierre.dubois@example.com",
+    "prixNuit": 120,
+    "_id": "661d39e2385117ea7df89633"
+  }
+]

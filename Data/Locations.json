@@ -1,11 +1,4 @@
 [
-    {
-        "idLocation": 1,
-        "idBien": 1,
-        "mailLoueur": "jean.dupont@example.com",
-        "dateDebut": 20240330,
-        "dateFin": 20240401,
-        "prixNuit": 120
-      }
+    
       
 ]

@@ -14,6 +14,8 @@ import { BiensDataService } from '../biens-data-service.service';
 export class AffichageBienComponent implements OnInit {
   biens: any[] = [];
   afficherDetailsSupplementaires: boolean = false;
+
+  
   constructor(private biensDataService: BiensDataService) { }
   
   ngOnInit(): void {
