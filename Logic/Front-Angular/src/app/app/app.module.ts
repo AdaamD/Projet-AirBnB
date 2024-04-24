@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AffichageBienComponent } from '../affichage-bien/affichage-bien.component';
 import {  NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SDKGoogleMapModule } from 'sdk-google-map';
 
 
 
@@ -11,7 +12,8 @@ import {  NgbModule } from '@ng-bootstrap/ng-bootstrap';
   imports: [
     CommonModule,
     FormsModule,
-    NgbModule
+    NgbModule,
+    SDKGoogleMapModule
   ]
 })
 export class AppModule { }

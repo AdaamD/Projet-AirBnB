@@ -24,8 +24,8 @@
             <li><strong>Nombre de couchages :</strong> {{ bien.nbCouchages }}</li>
             <!-- Ajoutez d'autres informations supplémentaires ici -->
           </ul>
-          <button class="btn-reservation">Réserver</button>
-        </ng-container>
+          <button class="btn-reservation" (click)="reserverBien(bien)">Réserver</button>
+                </ng-container>
       </div>
     </div>
   </div>

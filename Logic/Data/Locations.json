@@ -14,5 +14,13 @@
     "mailLoueur": "pierre.dubois@example.com",
     "prixNuit": 120,
     "_id": "661d39e2385117ea7df89633"
+  },
+  {
+    "idBien": 7,
+    "dateDebut": "2023-06-01",
+    "dateFin": "2023-06-07",
+    "mailLoueur": "nicolas.petit@example.com",
+    "prixNuit": 75,
+    "_id": "66293b1ba4d255fcf69bab55"
   }
 ]
