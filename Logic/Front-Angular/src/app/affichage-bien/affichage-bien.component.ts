@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { BiensService } from '../biens.service';
 import { BiensDataService } from '../biens-data-service.service';
 import { ReservationService } from '../reservation-service.service';
@@ -7,13 +8,18 @@ import { ReservationService } from '../reservation-service.service';
 @Component({
   selector: 'app-affichage-bien',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './affichage-bien.component.html',
   styleUrls: ['./affichage-bien.component.css']
 })
 export class AffichageBienComponent implements OnInit {
   biens: any[] = [];
   afficherDetailsSupplementaires: boolean = false;
+  showReservationModal: boolean = false;
+  mailLoueur: string = '';
+  dateDebut: string = '';
+  dateFin: string = '';
+  selectedBien: any;
 
   constructor(
     private biensDataService: BiensDataService,
@@ -38,12 +44,18 @@ export class AffichageBienComponent implements OnInit {
   }
 
   reserverBien(bien: any): void {
+    this.selectedBien = bien;
+    this.mailLoueur = bien.mailProprio;
+    this.showReservationModal = true;
+  }
+
+  enregistrerReservation(): void {
     const reservation = {
-      idBien: bien.idBien,
-      dateDebut: '2023-06-01', // Remplacez par les dates de réservation
-      dateFin: '2023-06-07',
-      mailLoueur: bien.mailProprio,
-      prixNuit: bien.prixNuit
+      idBien: this.selectedBien.idBien,
+      dateDebut: this.dateDebut,
+      dateFin: this.dateFin,
+      mailLoueur: this.mailLoueur,
+      prixNuit: this.selectedBien.prixNuit
     };
 
     this.reservationService.createReservation(reservation).subscribe(

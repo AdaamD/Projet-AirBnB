@@ -22,5 +22,21 @@
     "mailLoueur": "nicolas.petit@example.com",
     "prixNuit": 75,
     "_id": "66293b1ba4d255fcf69bab55"
+  },
+  {
+    "idBien": 6,
+    "dateDebut": "2023-06-01",
+    "dateFin": "2023-06-07",
+    "mailLoueur": "julie.richard@example.com",
+    "prixNuit": 110,
+    "_id": "66293c1aa4d255fcf69bab56"
+  },
+  {
+    "idBien": 5,
+    "dateDebut": "2024-04-23",
+    "dateFin": "2024-04-24",
+    "mailLoueur": "thomas.robert@example.com",
+    "prixNuit": 90,
+    "_id": "6629420ba4d255fcf69bab57"
   }
 ]
