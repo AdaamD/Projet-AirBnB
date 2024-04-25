@@ -109,33 +109,33 @@ app.get("/biens/:commune/:nbCouchagesMin", async (req, res) => {
     }
 });
 
-// Route pour effectuer des recherches de biens selon plusieurs critères
+/// Route pour effectuer des recherches de biens selon plusieurs critères
 app.get("/biens/recherche/:commune/:nbCouchagesMin/:prixMax/:nbChambresMin/:distanceMax", async (req, res) => {
     const { commune, nbCouchagesMin, prixMax, nbChambresMin, distanceMax } = req.params;
     try {
-        const db = await connectToDatabase();
-        const query = { commune: commune };
-
-        if (nbCouchagesMin !== 'null') {
-            query.nbCouchages = { $gte: parseInt(nbCouchagesMin) };
-        }
-        if (prixMax !== 'null') {
-            query.prixNuit = { $lte: parseInt(prixMax) };
-        }
-        if (nbChambresMin !== 'null') {
-            query.nbChambres = { $gte: parseInt(nbChambresMin) };
-        }
-        if (distanceMax !== 'null') {
-            query.distance = { $lte: parseFloat(distanceMax) };
-        }
-
-        const documents = await db.collection("Biens").find(query).toArray();
-        res.json(documents);
+      const db = await connectToDatabase();
+      const query = { commune: commune, estReserve: { $ne: true } };
+  
+      if (nbCouchagesMin !== 'null') {
+        query.nbCouchages = { $gte: parseInt(nbCouchagesMin) };
+      }
+      if (prixMax !== 'null') {
+        query.prixNuit = { $lte: parseInt(prixMax) };
+      }
+      if (nbChambresMin !== 'null') {
+        query.nbChambres = { $gte: parseInt(nbChambresMin) };
+      }
+      if (distanceMax !== 'null') {
+        query.distance = { $lte: parseFloat(distanceMax) };
+      }
+  
+      const documents = await db.collection("Biens").find(query).toArray();
+      res.json(documents);
     } catch (error) {
-        console.error("Erreur lors de la recherche des biens :", error);
-        res.status(500).json({ message: "Une erreur est survenue lors de la recherche des biens." });
+      console.error("Erreur lors de la recherche des biens :", error);
+      res.status(500).json({ message: "Une erreur est survenue lors de la recherche des biens." });
     }
-});
+  });
 
 // Route pour effectuer des recherches de biens selon plusieurs critères SANS COMMUNE
 app.get("/biens/recherche/:nbCouchagesMin/:prixMax/:nbChambresMin/:distanceMax", async (req, res) => {
@@ -216,36 +216,43 @@ app.get("/bienslouer/:commune", async (req, res) => {
 // Route pour enregistrer une réservation
 app.post("/reservations", async (req, res) => {
     try {
-        const { idBien, dateDebut, dateFin, mailLoueur, prixNuit } = req.body;
-
-        if (!idBien || !dateDebut || !dateFin || !mailLoueur || !prixNuit) {
-            throw new Error("Les données de la requête sont incorrectes.");
-        }
-
-        const intIdBien = parseInt(idBien);
-
-        const db = await connectToDatabase();
-
-        const newReservation = {
-            idBien: intIdBien,
-            dateDebut,
-            dateFin,
-            mailLoueur,
-            prixNuit: parseFloat(prixNuit)
-        };
-
-        const result = await db.collection("Locations").insertOne(newReservation);
-
-        const existingReservations = JSON.parse(fs.readFileSync(reservationsFilePath, "utf-8"));
-        existingReservations.push(newReservation);
-        writeReservationsToFile(existingReservations);
-
-        res.status(201).json({ message: "Réservation enregistrée avec succès", reservation: newReservation });
+      const { idBien, dateDebut, dateFin, mailLoueur, prixNuit } = req.body;
+  
+      if (!idBien || !dateDebut || !dateFin || !mailLoueur || !prixNuit) {
+        throw new Error("Les données de la requête sont incorrectes.");
+      }
+  
+      const intIdBien = parseInt(idBien);
+  
+      const db = await connectToDatabase();
+  
+      // Marquer le bien comme réservé
+      await db.collection("Biens").updateOne(
+        { idBien: intIdBien },
+        { $set: { estReserve: true } }
+      );
+      
+  
+      const newReservation = {
+        idBien: intIdBien,
+        dateDebut,
+        dateFin,
+        mailLoueur,
+        prixNuit: parseFloat(prixNuit)
+      };
+  
+      await db.collection("Locations").insertOne(newReservation);
+  
+      const existingReservations = JSON.parse(fs.readFileSync(reservationsFilePath, "utf-8"));
+      existingReservations.push(newReservation);
+      writeReservationsToFile(existingReservations);
+  
+      res.status(201).json({ message: "Réservation enregistrée avec succès", reservation: newReservation });
     } catch (error) {
-        console.error("Erreur lors de l'enregistrement de la réservation :", error);
-        res.status(500).json({ message: "Une erreur est survenue lors de l'enregistrement de la réservation." });
+      console.error("Erreur lors de l'enregistrement de la réservation :", error);
+      res.status(500).json({ message: "Une erreur est survenue lors de l'enregistrement de la réservation." });
     }
-});
+  });
 
 // Route pour laisser un avis sur un bien
 app.post("/laisseravis", async (req, res) => {

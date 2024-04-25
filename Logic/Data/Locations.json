@@ -38,5 +38,37 @@
     "mailLoueur": "thomas.robert@example.com",
     "prixNuit": 90,
     "_id": "6629420ba4d255fcf69bab57"
+  },
+  {
+    "idBien": 1,
+    "dateDebut": "2024-04-24",
+    "dateFin": "2024-04-26",
+    "mailLoueur": "jean.dupont@example.com",
+    "prixNuit": 120,
+    "_id": "662a17cb67577e78888847a0"
+  },
+  {
+    "idBien": 9,
+    "dateDebut": "2026-05-01",
+    "dateFin": "2026-04-08",
+    "mailLoueur": "adam.aAAAAAAA@example.com",
+    "prixNuit": 70,
+    "_id": "662a1b3b753a31d377d4fec0"
+  },
+  {
+    "idBien": 9,
+    "dateDebut": "2024-08-26",
+    "dateFin": "2024-08-30",
+    "mailLoueur": "NAAAAA@example.com",
+    "prixNuit": 70,
+    "_id": "662a1d09c1da8081f519e0ad"
+  },
+  {
+    "idBien": 11,
+    "dateDebut": "2024-12-26",
+    "dateFin": "2024-12-30",
+    "mailLoueur": "AZAZAAZA@example.com",
+    "prixNuit": 95,
+    "_id": "662a1d6ac1da8081f519e0ae"
   }
 ]
