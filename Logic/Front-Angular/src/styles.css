@@ -20,3 +20,10 @@ main {
   min-height: calc(100vh - 140px); /* Ajuste la hauteur minimale en fonction de la hauteur du header et du footer */
   color: #fff; /* Couleur du texte modifiée */
 }
+
+app-recherche-bien {
+  display: block;
+  margin-bottom: 2rem; /* Ajustez la valeur selon vos préférences */
+  margin-top: 2rem; /* Ajustez la valeur selon vos préférences */
+
+}
