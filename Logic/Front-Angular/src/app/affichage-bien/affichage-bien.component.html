@@ -65,3 +65,19 @@
     <button type="button" class="btn btn-outline-dark" (click)="enregistrerAvis(avisModal); modal.close('Save click')">Envoyer</button>
   </div>
 </ng-template>
+
+<ngb-toast
+  *ngIf="showSuccessToast"
+  header="Succès"
+  (hide)="showSuccessToast = false"
+>
+  {{ toastMessage }}
+</ngb-toast>
+
+<ngb-toast
+  *ngIf="showErrorToast"
+  header="Erreur"
+  (hide)="showErrorToast = false"
+>
+  {{ toastMessage }}
+</ngb-toast>

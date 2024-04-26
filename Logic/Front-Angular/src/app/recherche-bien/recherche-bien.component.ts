@@ -5,14 +5,14 @@ import { CommonModule } from '@angular/common';
 import { BiensDataService } from '../biens-data-service.service';
 
 @Component({
-  selector: 'app-nav-bar',
+  selector: 'app-recherche-bien',
   standalone: true,
   imports: [FormsModule,CommonModule],
-  templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.css']
+  templateUrl: './recherche-bien.component.html',
+  styleUrls: ['./recherche-bien.component.css']
 })
 
-export class NavBarComponent {
+export class RechercheBienComponent {
   startDate: string = '';
   endDate: string = '';
   commune: string = '';

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BiensService } from '../biens.service';
 import { BiensDataService } from '../biens-data-service.service';
 import { HttpClient } from '@angular/common/http';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { AvisService } from '../avis.service';
 import { ReservationService } from '../reservation-service.service';
 import { SDKGoogleMapComponent, SDKGoogleMapModule } from 'sdk-google-map';
@@ -12,7 +12,7 @@ import { SDKGoogleMapComponent, SDKGoogleMapModule } from 'sdk-google-map';
 @Component({
   selector: 'app-affichage-bien',
   standalone: true,
-  imports: [CommonModule, FormsModule, SDKGoogleMapModule],
+  imports: [CommonModule, FormsModule, SDKGoogleMapModule, NgbToastModule],
   templateUrl: './affichage-bien.component.html',
   styleUrls: ['./affichage-bien.component.css']
 })
@@ -20,6 +20,9 @@ export class AffichageBienComponent {
   biens: any[] = [];
   afficherDetailsSupplementaires: boolean = false;
   showReservationModal: boolean = false;
+  toastMessage: string = '';
+  showSuccessToast: boolean = false;
+  showErrorToast: boolean = false;
   showAvisModal: boolean = false;
   selectedBien: any;
   note: number = 0;
@@ -62,6 +65,8 @@ export class AffichageBienComponent {
     this.reservationService.createReservation(reservation).subscribe(
       (response) => {
         console.log('Réservation enregistrée avec succès:', response);
+        this.toastMessage = 'Réservation enregistrée avec succès !';
+        this.showSuccessToast = true;
         this.showReservationModal = false;
         this.modalRef?.close();
         // Réinitialiser les champs de saisie
@@ -71,6 +76,9 @@ export class AffichageBienComponent {
       },
       (error) => {
         console.error('Erreur lors de l\'enregistrement de la réservation:', error);
+        this.toastMessage = 'Une erreur est survenue lors de l\'enregistrement de la réservation.';
+      this.showErrorToast = true;
+        
       }
     );
   }

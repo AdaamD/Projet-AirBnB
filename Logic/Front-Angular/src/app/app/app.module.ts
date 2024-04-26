@@ -4,8 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AffichageBienComponent } from '../affichage-bien/affichage-bien.component';
 import {  NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SDKGoogleMapModule } from 'sdk-google-map';
-
-
+import { NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [AffichageBienComponent],
@@ -13,7 +12,8 @@ import { SDKGoogleMapModule } from 'sdk-google-map';
     CommonModule,
     FormsModule,
     NgbModule,
-    SDKGoogleMapModule
+    SDKGoogleMapModule,
+    NgbToastModule    
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

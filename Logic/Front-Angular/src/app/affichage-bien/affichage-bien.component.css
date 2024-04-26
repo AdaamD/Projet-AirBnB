@@ -127,3 +127,36 @@ body {
   cursor: pointer;
 }
 
+/* Styles pour les toasts */
+::ng-deep .toast {
+  width: 90%;
+  max-width: 1200px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+  color: #343a40;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  font-size: 1.2rem;
+  padding: 1.5rem;
+  height: auto;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+::ng-deep .toast-header {
+  background-color: #f8f9fa;
+  border-bottom-color: #dee2e6;
+  color: #343a40;
+  font-weight: bold;
+  font-size: 1.4rem;
+  padding: 0.5rem 1rem;
+}
+
+::ng-deep .toast-body {
+  color: #495057;
+  font-size: 1.2rem;
+  padding: 1rem;
+}
