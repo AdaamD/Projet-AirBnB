@@ -141,29 +141,30 @@ app.get("/biens/recherche/:commune/:nbCouchagesMin/:prixMax/:nbChambresMin/:dist
 app.get("/biens/recherche/:nbCouchagesMin/:prixMax/:nbChambresMin/:distanceMax", async (req, res) => {
     const { nbCouchagesMin, prixMax, nbChambresMin, distanceMax } = req.params;
     try {
-        const db = await connectToDatabase();
-        const query = {};
-
-        if (nbCouchagesMin !== 'null') {
-            query.nbCouchages = { $gte: parseInt(nbCouchagesMin) };
-        }
-        if (prixMax !== 'null') {
-            query.prixNuit = { $lte: parseInt(prixMax) };
-        }
-        if (nbChambresMin !== 'null') {
-            query.nbChambres = { $gte: parseInt(nbChambresMin) };
-        }
-        if (distanceMax !== 'null') {
-            query.distance = { $lte: parseFloat(distanceMax) };
-        }
-
-        const documents = await db.collection("Biens").find(query).toArray();
-        res.json(documents);
+      const db = await connectToDatabase();
+      const query = { estReserve: false };
+  
+      if (nbCouchagesMin !== 'null') {
+        query.nbCouchages = { $gte: parseInt(nbCouchagesMin) };
+      }
+      if (prixMax !== 'null') {
+        query.prixNuit = { $lte: parseInt(prixMax) };
+      }
+      if (nbChambresMin !== 'null') {
+        query.nbChambres = { $gte: parseInt(nbChambresMin) };
+      }
+      if (distanceMax !== 'null') {
+        query.distance = { $lte: parseFloat(distanceMax) };
+      }
+  
+      const documents = await db.collection("Biens").find(query).toArray();
+      res.json(documents);
     } catch (error) {
-        console.error("Erreur lors de la recherche des biens :", error);
-        res.status(500).json({ message: "Une erreur est survenue lors de la recherche des biens." });
+      console.error("Erreur lors de la recherche des biens :", error);
+      res.status(500).json({ message: "Une erreur est survenue lors de la recherche des biens." });
     }
-});
+  });
+  
 
 // Route pour récupérer les biens qui sont loués
 app.get("/locations", async (req, res) => {
@@ -214,12 +215,13 @@ app.get("/bienslouer/:commune", async (req, res) => {
 });
 
 // Route pour enregistrer une réservation
+// Route pour créer une nouvelle réservation
 app.post("/reservations", async (req, res) => {
-    try {
+  try {
       const { idBien, dateDebut, dateFin, mailLoueur, prixNuit } = req.body;
   
       if (!idBien || !dateDebut || !dateFin || !mailLoueur || !prixNuit) {
-        throw new Error("Les données de la requête sont incorrectes.");
+          throw new Error("Les données de la requête sont incorrectes.");
       }
   
       const intIdBien = parseInt(idBien);
@@ -228,32 +230,59 @@ app.post("/reservations", async (req, res) => {
   
       // Marquer le bien comme réservé
       await db.collection("Biens").updateOne(
-        { idBien: intIdBien },
-        { $set: { estReserve: true } }
+          { idBien: intIdBien },
+          { $set: { estReserve: true } }
       );
       
-  
       const newReservation = {
-        idBien: intIdBien,
-        dateDebut,
-        dateFin,
-        mailLoueur,
-        prixNuit: parseFloat(prixNuit)
+          idBien: intIdBien,
+          dateDebut,
+          dateFin,
+          mailLoueur,
+          prixNuit: parseFloat(prixNuit)
       };
   
-      await db.collection("Locations").insertOne(newReservation);
+      const result = await db.collection("Locations").insertOne(newReservation);
   
-      const existingReservations = JSON.parse(fs.readFileSync(reservationsFilePath, "utf-8"));
-      existingReservations.push(newReservation);
-      writeReservationsToFile(existingReservations);
+      const reservation = {
+          _id: result.insertedId,
+          idBien: intIdBien,
+          dateDebut,
+          dateFin,
+          mailLoueur,
+          prixNuit: parseFloat(prixNuit)
+      };
   
-      res.status(201).json({ message: "Réservation enregistrée avec succès", reservation: newReservation });
-    } catch (error) {
+      res.status(201).json({ message: "Réservation enregistrée avec succès", reservation: reservation });
+  } catch (error) {
       console.error("Erreur lors de l'enregistrement de la réservation :", error);
       res.status(500).json({ message: "Une erreur est survenue lors de l'enregistrement de la réservation." });
+  }
+});
+
+
+/// Route pour récupérer les biens loués par un loueur
+app.get("/locations/:mailLoueur", async (req, res) => {
+    const { mailLoueur } = req.params;
+    try {
+      const db = await connectToDatabase();
+      const documents = await db.collection("Locations").find({ mailLoueur: mailLoueur }).toArray();
+      const nbDocuments = await db.collection("Locations").countDocuments({ mailLoueur: mailLoueur });
+  
+      const response = {
+        documents: documents,
+        count: nbDocuments
+      };
+      res.json(response);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des biens :", error);
+      res.status(500).json({ message: "Une erreur est survenue lors de la récupération des biens." });
     }
   });
-
+  
+  
+  
+  
 // Route pour laisser un avis sur un bien
 app.post("/laisseravis", async (req, res) => {
     const { idBien, note, commentaire } = req.body;

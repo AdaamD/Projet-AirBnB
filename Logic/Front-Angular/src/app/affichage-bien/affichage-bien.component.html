@@ -23,19 +23,45 @@
           <li><strong>Nombre de couchages :</strong> {{ bien.nbCouchages }}</li>
           <!-- Ajoutez d'autres informations supplémentaires ici -->
         </ul>
-        <button class="btn-reservation" (click)="reserverBien(bien)">Réserver</button>
+
+        <sdk-google-map  [location]="bien.rue + ', ' + bien.commune"   [zoom]="'14'"> </sdk-google-map>
+
+        <button class="btn-reservation" (click)="reserverBien(bien, reservationModal)">Réserver</button>
+        <button class="btn-avis" (click)="ouvrirDialogueAvis(bien, avisModal)">Laisser un avis</button>
       </ng-container>
     </div>
   </div>
 </div>
 
-<div class="modal" *ngIf="showReservationModal">
-  <div class="modal-content">
-    <span class="close-button" (click)="showReservationModal = false">&times;</span>
-    <h2>Réservation</h2>
+<ng-template #reservationModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Réserver un bien</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
     <input type="text" placeholder="Mail du loueur" [(ngModel)]="mailLoueur" />
     <input type="date" placeholder="Date de début" [(ngModel)]="dateDebut" />
     <input type="date" placeholder="Date de fin" [(ngModel)]="dateFin" />
-    <button (click)="enregistrerReservation(); showReservationModal = false">Enregistrer la réservation</button>
   </div>
-</div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="enregistrerReservation(reservationModal); modal.close('Save click')">Réserver</button>
+  </div>
+</ng-template>
+
+<ng-template #avisModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Laisser un avis</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <input type="number" [(ngModel)]="note" placeholder="Note (1-5)" min="1" max="5">
+    <textarea [(ngModel)]="commentaire" placeholder="Commentaire"></textarea>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="enregistrerAvis(avisModal); modal.close('Save click')">Envoyer</button>
+  </div>
+</ng-template>

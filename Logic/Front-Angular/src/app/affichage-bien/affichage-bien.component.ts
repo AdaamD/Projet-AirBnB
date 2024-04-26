@@ -1,41 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BiensService } from '../biens.service';
 import { BiensDataService } from '../biens-data-service.service';
+import { HttpClient } from '@angular/common/http';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { AvisService } from '../avis.service';
 import { ReservationService } from '../reservation-service.service';
+import { SDKGoogleMapComponent, SDKGoogleMapModule } from 'sdk-google-map';
 
 @Component({
   selector: 'app-affichage-bien',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SDKGoogleMapModule],
   templateUrl: './affichage-bien.component.html',
   styleUrls: ['./affichage-bien.component.css']
 })
-export class AffichageBienComponent implements OnInit {
+export class AffichageBienComponent {
   biens: any[] = [];
   afficherDetailsSupplementaires: boolean = false;
   showReservationModal: boolean = false;
+  showAvisModal: boolean = false;
+  selectedBien: any;
+  note: number = 0;
+  commentaire: string = '';
+  modalRef: NgbModalRef | null = null;
   mailLoueur: string = '';
   dateDebut: string = '';
   dateFin: string = '';
-  selectedBien: any;
 
   constructor(
     private biensDataService: BiensDataService,
+    private http: HttpClient,
+    private modalService: NgbModal,
+    private avisService: AvisService,
     private reservationService: ReservationService
-  ) {}
-
-  ngOnInit(): void {
-    // Utilisez des valeurs par défaut pour les critères de recherche
-    const startDate = '';
-    const endDate = '';
-    const commune = ''; // Vous pouvez remplacer par une commune spécifique
-    const maxPrice = 1000; // Vous pouvez remplacer par un prix maximum
-    const minRooms = 1; // Vous pouvez remplacer par un nombre de chambres minimum
-    const minBeds = 1; // Vous pouvez remplacer par un nombre de couchages minimum
-    const maxDistance = 1000; // Vous pouvez remplacer par une distance maximum
-
+  ) {
     this.biensDataService.biens$.subscribe(
       (biens) => {
         this.biens = biens;
@@ -43,13 +43,14 @@ export class AffichageBienComponent implements OnInit {
     );
   }
 
-  reserverBien(bien: any): void {
+  reserverBien(bien: any, reservationModal: any): void {
     this.selectedBien = bien;
     this.mailLoueur = bien.mailProprio;
     this.showReservationModal = true;
+    this.modalRef = this.modalService.open(reservationModal, { ariaLabelledBy: 'modal-basic-title' });
   }
 
-  enregistrerReservation(): void {
+  enregistrerReservation(reservationModal: any): void {
     const reservation = {
       idBien: this.selectedBien.idBien,
       dateDebut: this.dateDebut,
@@ -61,11 +62,42 @@ export class AffichageBienComponent implements OnInit {
     this.reservationService.createReservation(reservation).subscribe(
       (response) => {
         console.log('Réservation enregistrée avec succès:', response);
-        // Affichez un message de succès ou effectuez d'autres actions
+        this.showReservationModal = false;
+        this.modalRef?.close();
+        // Réinitialiser les champs de saisie
+        this.dateDebut = '';
+        this.dateFin = '';
+        this.mailLoueur = '';
       },
       (error) => {
         console.error('Erreur lors de l\'enregistrement de la réservation:', error);
-        // Affichez un message d'erreur
+      }
+    );
+  }
+
+  ouvrirDialogueAvis(bien: any, avisModal: any): void {
+    this.selectedBien = bien;
+    this.modalRef = this.modalService.open(avisModal, { ariaLabelledBy: 'modal-basic-title' });
+    this.showAvisModal = true;
+  }
+
+  enregistrerAvis(avisModal: any): void {
+    const avis = {
+      idBien: this.selectedBien._id,
+      note: this.note,
+      commentaire: this.commentaire
+    };
+    this.avisService.createAvis(avis).subscribe(
+      (response) => {
+        console.log('Avis enregistré avec succès :', response);
+        this.showAvisModal = false;
+        this.modalRef?.close();
+        // Réinitialiser les champs de saisie
+        this.note = 0;
+        this.commentaire = '';
+      },
+      (error) => {
+        console.error('Erreur lors de l\'enregistrement de l\'avis :', error);
       }
     );
   }

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AffichageBienComponent } from '../affichage-bien/affichage-bien.component';
@@ -14,6 +14,7 @@ import { SDKGoogleMapModule } from 'sdk-google-map';
     FormsModule,
     NgbModule,
     SDKGoogleMapModule
-  ]
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }
