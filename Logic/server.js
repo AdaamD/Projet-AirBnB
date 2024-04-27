@@ -287,31 +287,58 @@ app.get("/locations/:mailLoueur", async (req, res) => {
 app.post("/laisseravis", async (req, res) => {
     const { idBien, note, commentaire } = req.body;
     try {
-        const intIdBien = parseInt(idBien);
-
-        const db = await connectToDatabase();
-
-        const newAvis = {
-            idBien: intIdBien,
-            note,
-            commentaire
-        };
-
-        const result = await db.collection("Avis").insertOne(newAvis);
-
-        const avisEnregistre = {
-            _id: result.insertedId,
-            idBien: intIdBien,
-            note,
-            commentaire
-        };
-
-        res.status(201).json({ message: "Avis enregistré avec succès", avis: avisEnregistre });
+      const intIdBien = parseInt(idBien);
+  
+      const db = await connectToDatabase();
+  
+      // Vérifier si le bien existe
+      const bien = await db.collection("Biens").findOne({ idBien: intIdBien });
+      if (!bien) {
+        throw new Error("Le bien spécifié n'existe pas.");
+      }
+  
+      const newAvis = {
+        idBien: intIdBien,
+        note,
+        commentaire
+      };
+  
+      const result = await db.collection("Avis").insertOne(newAvis);
+  
+      const avisEnregistre = {
+        _id: result.insertedId,
+        idBien: intIdBien,
+        note,
+        commentaire
+      };
+  
+      res.status(201).json({ message: "Avis enregistré avec succès", avis: avisEnregistre });
     } catch (error) {
-        console.error("Erreur lors de l'enregistrement de l'avis :", error);
-        res.status(500).json({ message: "Une erreur est survenue lors de l'enregistrement de l'avis." });
+      console.error("Erreur lors de l'enregistrement de l'avis :", error);
+      res.status(500).json({ message: "Une erreur est survenue lors de l'enregistrement de l'avis." });
     }
-});
+  });
+
+  // Route pour récupérer la note moyenne d'un bien
+app.get("/laisseravis/moyenne/:idBien", async (req, res) => {
+    const { idBien } = req.params;
+    try {
+      const db = await connectToDatabase();
+      const avis = await db.collection("Avis").find({ idBien: parseInt(idBien) }).toArray();
+  
+      if (avis.length === 0) {
+        res.json(0); // Retourne 0 si aucun avis n'a été trouvé
+      } else {
+        const noteTotal = avis.reduce((total, avis) => total + avis.note, 0);
+        const noteAverage = noteTotal / avis.length;
+        res.json(noteAverage);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération de la note moyenne:", error);
+      res.status(500).json({ message: "Une erreur est survenue lors de la récupération de la note moyenne." });
+    }
+  });
+  
 
 // Démarrage du serveur
 app.listen(port, () => {

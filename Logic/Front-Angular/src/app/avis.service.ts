@@ -10,7 +10,9 @@ export class AvisService {
 
   constructor(private http: HttpClient) {}
 
-  createAvis(avis: any): Observable<any> {
+  createAvis(avis: { idBien: number; note: number; commentaire: string }): Observable<any> {
     return this.http.post(this.apiUrl, avis);
   }
+
+  
 }

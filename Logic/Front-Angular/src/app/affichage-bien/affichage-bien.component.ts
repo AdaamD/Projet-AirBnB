@@ -24,6 +24,7 @@ export class AffichageBienComponent {
   showSuccessToast: boolean = false;
   showErrorToast: boolean = false;
   showAvisModal: boolean = false;
+  selectedBienId: number = 0;
   selectedBien: any;
   note: number = 0;
   commentaire: string = '';
@@ -77,21 +78,20 @@ export class AffichageBienComponent {
       (error) => {
         console.error('Erreur lors de l\'enregistrement de la réservation:', error);
         this.toastMessage = 'Une erreur est survenue lors de l\'enregistrement de la réservation.';
-      this.showErrorToast = true;
-        
+        this.showErrorToast = true;
       }
     );
   }
 
   ouvrirDialogueAvis(bien: any, avisModal: any): void {
-    this.selectedBien = bien;
+    this.selectedBienId = bien.idBien;
     this.modalRef = this.modalService.open(avisModal, { ariaLabelledBy: 'modal-basic-title' });
     this.showAvisModal = true;
   }
 
   enregistrerAvis(avisModal: any): void {
     const avis = {
-      idBien: this.selectedBien._id,
+      idBien: this.selectedBienId,
       note: this.note,
       commentaire: this.commentaire
     };
@@ -109,4 +109,6 @@ export class AffichageBienComponent {
       }
     );
   }
+
+  
 }
