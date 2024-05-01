@@ -4,31 +4,43 @@
       <h3>{{ bien.commune }} - {{ bien.rue }}</h3>
     </div>
     <div class="bien-details">
-      <ul>
-        <!-- Informations principales -->
-        <li><strong>Commune :</strong> {{ bien.commune }}</li>
-        <li><strong>Rue :</strong> {{ bien.rue }}</li>
-        <li><strong>Nombre de chambres :</strong> {{ bien.nbChambres }}</li>
-        <li><strong>Prix par nuit :</strong> {{ bien.prixNuit }} €</li>
-      </ul>
-      <button class="btn-details" (click)="afficherDetailsSupplementaires = !afficherDetailsSupplementaires">
-        {{ afficherDetailsSupplementaires ? '-' : '+' }}
-      </button>
-      <ng-container *ngIf="afficherDetailsSupplementaires">
-        <ul>
-          <!-- Informations supplémentaires -->
-          <li><strong>Adresse e-mail du propriétaire :</strong> {{ bien.mailProprio }}</li>
-          <li><strong>Code postal :</strong> {{ bien.cp }}</li>
-          <li><strong>Distance :</strong> {{ bien.distance }} km</li>
-          <li><strong>Nombre de couchages :</strong> {{ bien.nbCouchages }}</li>
-          <!-- Ajoutez d'autres informations supplémentaires ici -->
-        </ul>
-
-        <sdk-google-map  [location]="bien.rue + ', ' + bien.commune"   [zoom]="'14'"> </sdk-google-map>
-
+      <div class="bien-info">
+        <div class="bien-info-left">
+          <ul>
+            <li><strong>Commune : </strong> <span>{{ bien.commune }}</span></li>
+            <li><strong>Rue : </strong> <span>{{ bien.rue }}</span></li>
+            <li><strong>Nombre de chambres : </strong> <span>{{ bien.nbChambres }}</span></li>
+            <li><strong>Prix par nuit : </strong> <span>{{ bien.prixNuit }} €</span></li>
+          </ul>
+        </div>
+       <!--
+        <div class="bien-info-right">
+          <div class="bien-preview">
+            <img [src]="bien.imageUrl" alt="Aperçu du bien">
+          </div>
+        </div>
+        -->
+      </div>
+      <div class="bien-actions">
+        <button class="btn-details" (click)="afficherDetailsSupplementaires = !afficherDetailsSupplementaires">
+          {{ afficherDetailsSupplementaires ? '-' : '+' }}
+        </button>
         <button class="btn-reservation" (click)="reserverBien(bien, reservationModal)">Réserver</button>
         <button class="btn-avis" (click)="ouvrirDialogueAvis(bien, avisModal)">Laisser un avis</button>
-      </ng-container>
+      </div>
+      <div *ngIf="afficherDetailsSupplementaires" class="bien-details-supplementaires">
+        <ul>
+          <li><strong>Adresse e-mail du propriétaire : </strong> <span>{{ bien.mailProprio }}</span></li>
+          <li><strong>Code postal : </strong> <span>{{ bien.cp }}</span></li>
+          <li><strong>Distance : </strong> <span>{{ bien.distance }} km</span></li>
+          <li><strong>Nombre de couchages : </strong> <span>{{ bien.nbCouchages }}</span></li>
+          <!-- Ajoutez d'autres informations supplémentaires ici -->
+        </ul>
+        
+        <div class="bien-map">
+          <sdk-google-map [location]="bien.rue + ', ' + bien.commune" [zoom]="'14'"> </sdk-google-map>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -81,3 +93,20 @@
 >
   {{ toastMessage }}
 </ngb-toast>
+
+<ngb-toast
+  *ngIf="showSuccessAvisToast"
+  header="Succès"
+  (hide)="showSuccessAvisToast = false"
+>
+  {{ avisToastMessage }}
+</ngb-toast>
+
+<ngb-toast
+  *ngIf="showErrorAvisToast"
+  header="Erreur"
+  (hide)="showErrorAvisToast = false"
+>
+  {{ avisToastMessage }}
+</ngb-toast>
+

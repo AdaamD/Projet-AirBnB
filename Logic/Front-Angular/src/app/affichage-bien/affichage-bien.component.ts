@@ -23,6 +23,9 @@ export class AffichageBienComponent {
   toastMessage: string = '';
   showSuccessToast: boolean = false;
   showErrorToast: boolean = false;
+  showSuccessAvisToast: boolean = false;
+  showErrorAvisToast: boolean = false;
+  avisToastMessage: string = '';
   showAvisModal: boolean = false;
   selectedBienId: number = 0;
   selectedBien: any;
@@ -39,14 +42,18 @@ export class AffichageBienComponent {
     private modalService: NgbModal,
     private avisService: AvisService,
     private reservationService: ReservationService
-  ) {
+  ) 
+  {
     this.biensDataService.biens$.subscribe(
       (biens) => {
         this.biens = biens;
+        this.biens.forEach((bien) => {
+        });
       }
     );
   }
 
+  
   reserverBien(bien: any, reservationModal: any): void {
     this.selectedBien = bien;
     this.mailLoueur = bien.mailProprio;
@@ -62,7 +69,7 @@ export class AffichageBienComponent {
       mailLoueur: this.mailLoueur,
       prixNuit: this.selectedBien.prixNuit
     };
-
+  
     this.reservationService.createReservation(reservation).subscribe(
       (response) => {
         console.log('Réservation enregistrée avec succès:', response);
@@ -82,6 +89,8 @@ export class AffichageBienComponent {
       }
     );
   }
+  
+  
 
   ouvrirDialogueAvis(bien: any, avisModal: any): void {
     this.selectedBienId = bien.idBien;
@@ -100,15 +109,20 @@ export class AffichageBienComponent {
         console.log('Avis enregistré avec succès :', response);
         this.showAvisModal = false;
         this.modalRef?.close();
+        this.avisToastMessage = 'Avis enregistré avec succès !';
+        this.showSuccessAvisToast = true;
         // Réinitialiser les champs de saisie
         this.note = 0;
         this.commentaire = '';
       },
       (error) => {
         console.error('Erreur lors de l\'enregistrement de l\'avis :', error);
+        this.avisToastMessage = 'Une erreur est survenue lors de l\'enregistrement de l\'avis.';
+        this.showErrorAvisToast = true;
       }
     );
   }
+  
 
   
 }
