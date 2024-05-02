@@ -339,6 +339,7 @@ app.get("/laisseravis/moyenne/:idBien", async (req, res) => {
     }
   });
   
+  
 
 // Démarrage du serveur
 app.listen(port, () => {

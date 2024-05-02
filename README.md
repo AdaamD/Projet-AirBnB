@@ -3,6 +3,15 @@
 Projet de Location de biens avec M E A N de l'UE Architecture Avancé Web.
 Location de Biens est une application web permettant aux utilisateurs de rechercher, réserver et laisser des avis sur des biens immobiliers disponibles à la location. Cette application a été développée en utilisant Angular pour le front-end et Node.js avec Express pour le back-end.
 
+## Auteur
+
+Ce projet a été réalisé par :
+
+- DAIA Adam
+- DAFAOUI Mohamed
+
+Étudiants en M1 Génie Logiciel à l'Université de Montpellier
+
 ## Fonctionnalités clés
 
 - Recherche de biens par critères (commune, prix, nombre de chambres, nombre de couchages, distance)
@@ -18,6 +27,7 @@ Location de Biens est une application web permettant aux utilisateurs de recherc
 - MongoDB pour la base de données
 - ng-bootstrap pour les composants de l'interface utilisateur
 - sdk-google-map pour l'intégration de la carte Google Maps
+
 
 
 

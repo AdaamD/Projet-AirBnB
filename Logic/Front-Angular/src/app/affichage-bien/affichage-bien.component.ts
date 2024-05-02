@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BiensService } from '../biens.service';
@@ -16,7 +16,7 @@ import { SDKGoogleMapComponent, SDKGoogleMapModule } from 'sdk-google-map';
   templateUrl: './affichage-bien.component.html',
   styleUrls: ['./affichage-bien.component.css']
 })
-export class AffichageBienComponent {
+export class AffichageBienComponent implements OnInit {
   biens: any[] = [];
   afficherDetailsSupplementaires: boolean = false;
   showReservationModal: boolean = false;
@@ -35,6 +35,7 @@ export class AffichageBienComponent {
   mailLoueur: string = '';
   dateDebut: string = '';
   dateFin: string = '';
+  noteMoyenne: number = 0;
 
   constructor(
     private biensDataService: BiensDataService,
@@ -42,17 +43,32 @@ export class AffichageBienComponent {
     private modalService: NgbModal,
     private avisService: AvisService,
     private reservationService: ReservationService
-  ) 
-  {
+  ) {}
+
+  ngOnInit() {
     this.biensDataService.biens$.subscribe(
       (biens) => {
         this.biens = biens;
         this.biens.forEach((bien) => {
+          this.getBienNoteMoyenne(bien.idBien).then((noteMoyenne) => {
+            bien.noteMoyenne = noteMoyenne;
+            console.log("Note moyenne", noteMoyenne);
+          });
         });
       }
     );
   }
 
+  async getBienNoteMoyenne(idBien: number): Promise<number> {
+    try {
+      const noteMoyenne = await this.avisService.getNoteMoyenne(idBien).toPromise();
+      return noteMoyenne || 0; // Utilisation d'une valeur par défaut si noteMoyenne est undefined
+    } catch (error) {
+      console.error('Erreur lors de la récupération de la note moyenne :', error);
+      return 0; // ou une valeur par défaut appropriée
+    }
+  }
+  
   
   reserverBien(bien: any, reservationModal: any): void {
     this.selectedBien = bien;
@@ -89,8 +105,6 @@ export class AffichageBienComponent {
       }
     );
   }
-  
-  
 
   ouvrirDialogueAvis(bien: any, avisModal: any): void {
     this.selectedBienId = bien.idBien;
@@ -122,7 +136,4 @@ export class AffichageBienComponent {
       }
     );
   }
-  
-
-  
 }

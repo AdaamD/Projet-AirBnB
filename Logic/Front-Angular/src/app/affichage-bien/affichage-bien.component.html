@@ -2,6 +2,7 @@
   <div *ngFor="let bien of biens" class="bien-item">
     <div class="bien-header">
       <h3>{{ bien.commune }} - {{ bien.rue }}</h3>
+      <p>Note moyenne : {{ bien.noteMoyenne }}</p>
     </div>
     <div class="bien-details">
       <div class="bien-info">
@@ -13,13 +14,13 @@
             <li><strong>Prix par nuit : </strong> <span>{{ bien.prixNuit }} €</span></li>
           </ul>
         </div>
-       <!--
+       
         <div class="bien-info-right">
           <div class="bien-preview">
-            <img [src]="bien.imageUrl" alt="Aperçu du bien">
+            <img [src]=bien.imageUrl alt="Aperçu du bien">
           </div>
         </div>
-        -->
+        
       </div>
       <div class="bien-actions">
         <button class="btn-details" (click)="afficherDetailsSupplementaires = !afficherDetailsSupplementaires">
